@@ -351,7 +351,8 @@
             justify-content: center;
             box-shadow: 0 20px 60px rgba(124, 58, 237, 0.16);
             position: relative;
-            overflow: hidden
+            overflow: hidden;
+            margin-top: 20px;
         }
 
         .vault-door::after {
@@ -1351,7 +1352,7 @@
             else lines.push("<strong>Savings:</strong> Strong savings habit. Deploy into diversified equity for long-term growth.");
             if (inv < 40) lines.push("<strong>Invest:</strong> Start small SIPs (₹500–2000). Diversify across large-cap and balanced funds.");
             else lines.push("<strong>Invest:</strong> Rebalance annually; use goal-based SIPs for child/retirement goals.");
-            lines.push("<em>Activate Wealth Chamber to get +100 ₹C and a personalised 15-min advisory call.</em>");
+            lines.push("<em>Activate Wealth Chamber to get +100 ₹C .</em>");
             return lines.map(l => `<div style="margin-bottom:8px">${l}</div>`).join('');
         }
         function animateCoinRoll(target) {
@@ -1703,4 +1704,5 @@ DARK/LIGHT MODE TOGGLE
 </body>
 
 </html>
+
 
