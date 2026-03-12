@@ -1,0 +1,1705 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Paisabada — Financial Health Scan (Science-Based)</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #070712;
+            --card: #0f1720;
+            --muted: #9aa4b2;
+            --accentA: #6ee7f2;
+            --accentB: #7c3aed;
+            --glass: rgba(255, 255, 255, 0.04);
+            --success: #00d27a;
+            --danger: #ff5c5c;
+            --gold: #ffd166;
+            font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            /* background: #00d27a; */
+            color: #e6eef6;
+            /* background-color: floralwhite; */
+        }
+
+        .wrap {
+            max-width: 980px;
+            margin: 36px auto;
+            padding: 24px;
+            background: radial-gradient(1200px 600px at 10% 10%, rgba(15, 226, 233, 0.08), transparent), var(--bg);
+            border-radius: 10px;
+        }
+
+        .brand {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        /* .logo {
+            width: 54px;
+            height: 54px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--accentA), var(--accentB));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            color: #071026;
+            font-size: 20px;
+            box-shadow: 0 8px 30px rgba(124, 58, 237, 0.12), inset 0 -6px 20px rgba(255, 255, 255, 0.06);
+        } */
+
+        h1 {
+            margin: 0;
+            font-size: 20px
+        }
+
+        p.lead {
+            color: var(--muted);
+            margin: 6px 0 20px
+        }
+
+        .card {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+            border-radius: 14px;
+            padding: 18px;
+            box-shadow: 0 8px 40px rgba(2, 6, 23, 0.6);
+            backdrop-filter: blur(6px);
+        }
+
+        .quiz-grid {
+            display: grid;
+            grid-template-columns: 1fr 360px;
+            gap: 18px
+        }
+
+        @media (max-width:880px) {
+            .quiz-grid {
+                grid-template-columns: 1fr
+            }
+
+            .aside {
+                order: 2
+            }
+        }
+
+        .question {
+            margin-bottom: 14px
+        }
+
+        .q-title {
+            font-weight: 600;
+            margin-bottom: 8px
+        }
+
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px
+        }
+
+        .option {
+            background: var(--glass);
+            padding: 10px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            color: #dce8f6;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            user-select: none
+        }
+
+        .option.active {
+            background: linear-gradient(90deg, #0ea5e933, rgba(255, 255, 255, 0.03));
+            box-shadow: 0 6px 22px rgba(7, 13, 24, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.06)
+        }
+
+        .small {
+            font-size: 13px;
+            color: var(--muted)
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 14px;
+            border-radius: 10px;
+            border: 0;
+            cursor: pointer;
+            font-weight: 700
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, var(--accentA), var(--accentB));
+            color: #071026;
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.18)
+        }
+
+        .btn-ghost {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            color: var(--muted)
+        }
+
+        .progress {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 10px 0
+        }
+
+        .progress>span {
+            display: block;
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, var(--accentA), var(--accentB));
+            border-radius: 8px;
+            transition: width .6s ease
+        }
+
+        /* rainbow meter */
+        .rainbow-meter {
+            height: 12px;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #ff3cac, #755efd, #00d2ff, #00ff9c, #ffd166);
+            background-size: 300% 100%;
+            animation: rainbowShift 6s linear infinite;
+            margin-top: 8px;
+            box-shadow: 0 8px 30px rgba(124, 58, 237, 0.06)
+        }
+
+        @keyframes rainbowShift {
+            0% {
+                background-position: 0% 50%
+            }
+
+            50% {
+                background-position: 100% 50%
+            }
+
+            100% {
+                background-position: 0% 50%
+            }
+        }
+
+        .meter-track {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 10px;
+            padding: 4px
+        }
+
+        .meter-fill {
+            height: 8px;
+            border-radius: 8px;
+            background: linear-gradient(90deg, #ffffff33, #ffffff11);
+            width: 0%;
+            transition: width .9s cubic-bezier(.2, .9, .2, 1)
+        }
+
+        /* aside (score + CTA) */
+        .aside {
+            position: relative;
+            padding: 18px;
+            border-radius: 12px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.01), rgba(255, 255, 255, 0.02));
+            min-height: 220px
+        }
+
+        .score-big {
+            font-size: 42px;
+            font-weight: 800;
+            letter-spacing: 0.6px
+        }
+
+        .coin-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 12px
+        }
+
+        .coin-badge {
+            width: 72px;
+            height: 72px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #ffd166, #f59527);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #071026;
+            font-weight: 800;
+            font-size: 22px;
+            box-shadow: 0 10px 30px rgba(255, 209, 102, 0.15)
+        }
+
+        .muted-block {
+            color: var(--muted);
+            font-size: 13px;
+            margin-top: 8px
+        }
+
+        .ledger {
+            font-family: monospace;
+            background: rgba(0, 0, 0, 0.18);
+            padding: 10px;
+            border-radius: 8px;
+            color: #e6eef6
+        }
+
+        .muted-sm {
+            font-size: 13px;
+            color: var(--muted)
+        }
+
+        /* result overlay */
+        .overlay {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 80;
+            padding: 16px
+        }
+
+        .overlay.active {
+            display: flex
+        }
+
+        .result-card {
+            width: 920px;
+            max-width: 92%;
+            border-radius: 16px;
+            padding: 28px;
+            background: linear-gradient(180deg, rgba(7, 10, 20, 0.9), rgba(7, 10, 20, 0.95));
+            box-shadow: 0 30px 80px rgba(2, 6, 23, 0.8);
+            display: flex;
+            gap: 22px;
+            align-items: center
+        }
+
+        /* robust left/right so no overlap */
+        .result-card {
+            display: flex;
+            gap: 22px;
+            align-items: flex-start;
+        }
+
+        .result-left {
+            flex: 1 1 0%;
+            min-width: 0;
+            overflow: auto;
+            max-height: calc(100vh - 140px);
+            padding-right: 12px;
+            box-sizing: border-box;
+            z-index: 1;
+        }
+
+        .result-right {
+            flex: 0 0 320px;
+            min-width: 260px;
+            max-width: 360px;
+            align-self: flex-start;
+            position: sticky;
+            top: 20px;
+            padding: 18px;
+            border-radius: 12px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+            box-shadow: 0 14px 40px rgba(2, 6, 23, 0.45);
+            z-index: 2;
+        }
+
+        .result-right,
+        .coin-roller,
+        .ledger {
+            background: linear-gradient(to left, violet,
+                    indigo, blue, green, yellow, orange, red);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .wow-anim {
+            display: flex;
+            align-items: center;
+            gap: 14px
+        }
+
+        .coin-roller {
+            font-weight: 900;
+            font-size: 36px
+        }
+
+        .vault-door {
+            width: 140px;
+            height: 140px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, var(--accentA), var(--accentB));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 20px 60px rgba(124, 58, 237, 0.16);
+            position: relative;
+            overflow: hidden
+        }
+
+        .vault-door::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(0deg, rgba(255, 255, 255, 0.08), transparent);
+            opacity: 0;
+            transition: opacity .7s
+        }
+
+        .vault-door.open::after {
+            opacity: 1
+        }
+
+        .vault-door .door-icon {
+            font-weight: 800;
+            color: #071026;
+            font-size: 36px
+        }
+
+        .muted-sm {
+            font-size: 13px;
+            color: var(--muted)
+        }
+
+        /* vault page */
+        .vault-page {
+            display: none;
+            min-height: 320px;
+            padding: 22px;
+            border-radius: 12px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.01), rgba(255, 255, 255, 0.02));
+            margin-top: 18px
+        }
+
+        .vault-page.active {
+            display: block
+        }
+
+        .balance {
+            display: flex;
+            align-items: center;
+            gap: 16px
+        }
+
+        .balance .big {
+            font-size: 34px;
+            font-weight: 800
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px
+        }
+
+        /* small helpers */
+        .pill {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 6px 8px;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 13px
+        }
+
+        footer {
+            color: var(--muted);
+            font-size: 13px;
+            margin-top: 20px;
+            text-align: center
+        }
+
+        /* animations */
+        .roll-up {
+            animation: rollUp 0.9s ease forwards
+        }
+
+        @keyframes rollUp {
+            from {
+                transform: translateY(18px);
+                opacity: 0
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn .5s ease forwards;
+            opacity: 0
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0
+            }
+
+            to {
+                opacity: 1
+            }
+        }
+
+        .count-up {
+            transition: transform .9s cubic-bezier(.2, .9, .2, 1)
+        }
+
+        /* slider styles */
+        .slider-row {
+            display: flex;
+            flex-direction: column;
+            gap: 8px
+        }
+
+        input[type=range] {
+            width: 100%
+        }
+
+        .small-note {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 6px
+        }
+
+        /* Gauge styles (new) */
+        #gaugeNeedle {
+            transform-origin: 0px 0px;
+            transition: transform 700ms cubic-bezier(.2, .9, .2, 1);
+        }
+
+        #paisaGauge path {
+            filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.35));
+        }
+
+        /* Contact/OTP modal (inside overlay to keep one overlay) */
+        .contact-modal {
+            background: linear-gradient(180deg, rgba(8, 10, 14, 0.98), rgba(12, 14, 18, 0.99));
+            padding: 18px;
+            border-radius: 12px;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6);
+            max-width: 520px;
+            width: 100%;
+            color: #e6eef6;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+        }
+
+        .field label {
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 6px;
+        }
+
+        .field input {
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: rgba(255, 255, 255, 0.01);
+            color: #e6eef6
+        }
+
+        .otp-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-top: 8px
+        }
+
+        .small-muted {
+            font-size: 12px;
+            color: var(--muted)
+        }
+
+        /* responsive overlay adjustments */
+        @media (max-width:720px) {
+            .result-card {
+                flex-direction: column;
+                padding: 18px;
+                border-radius: 10px;
+                max-height: 100vh;
+                overflow: hidden;
+            }
+
+            .result-left {
+                max-height: calc(100vh - 260px);
+                padding-right: 0;
+            }
+
+            .result-right {
+                position: relative;
+                top: 0;
+                width: 100%;
+                flex: 0 0 auto;
+                margin-top: 12px;
+            }
+
+            .contact-modal {
+                max-width: 96%;
+                margin: 8px auto;
+            }
+        }
+
+        /* -----------------------------------------
+   LIGHT THEME VARIABLES
+----------------------------------------- */
+        .light {
+            --bg: #ffffff;
+            --card: #f4f7fb;
+            --muted: #5a6573;
+            --accentA: #4cc9f0;
+            --accentB: #4361ee;
+            --glass: rgba(0, 0, 0, 0.05);
+            --success: #06c270;
+            --danger: #ff5c5c;
+            --gold: #c99700;
+            color: #1a1a1a;
+        }
+
+        .light body {
+            background: #ffffff !important;
+            color: #1a1a1a !important;
+        }
+
+        .light .wrap {
+            background: #ffffff !important;
+        }
+
+        .light .card,
+        .light .aside,
+        .light .result-right,
+        .light .result-card,
+        .light .vault-page,
+        .light .contact-modal {
+            background: #ffffff !important;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08) !important;
+        }
+
+        .light .option {
+            color: #222 !important;
+            border: 1px solid rgba(0, 0, 0, 0.08) !important;
+        }
+
+        .light .option.active {
+            background: rgba(67, 97, 238, 0.12) !important;
+            border: 1px solid rgba(67, 97, 238, 0.3) !important;
+        }
+
+        .light .small,
+        .light .muted-sm,
+        .light footer {
+            color: var(--muted) !important;
+        }
+
+        .light .meter-track {
+            background: rgba(0, 0, 0, 0.08) !important;
+        }
+
+        .light #paisaGauge line {
+            stroke: #5a6573 !important;
+        }
+
+        /* -----------------------------------------
+   CLEAN LOGO — NO BOX, ONLY IMAGE
+----------------------------------------- */
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 0px;
+            background: none;
+            /* border-radius: 10px; */
+            /* No box padding */
+            border: none;
+            /* No border */
+            backdrop-filter: none;
+            box-shadow: none;
+            /* Remove glow */
+            /* position: relative; */
+        }
+
+        /* Make logo big & visible */
+        .app-logo {
+            height: 100px;
+            /* adjust as needed */
+            width: 130px;
+            display: block;
+            filter: none;
+            /* mix-blend-mode: multiply; */
+            border-radius: 10px;
+
+            image-rendering: -webkit-optimize-contrast;
+
+            opacity: 0;
+            animation: logoFadeIn 0.4s ease forwards;
+        }
+
+        /* Remove hover effects */
+        .logo-container:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Dark mode — keep image natural */
+        html:not(.light) .app-logo {
+            filter: none;
+        }
+
+        /* Light mode */
+        .light .app-logo {
+            filter: none;
+        }
+
+        /* Fade-in animation */
+        @keyframes logoFadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* =========================
+   MOBILE FIRST ENHANCEMENTS
+========================= */
+
+        @media (max-width: 640px) {
+
+            /* page padding fix */
+            .wrap {
+                margin: 0;
+                padding: 14px;
+                border-radius: 0;
+            }
+
+            /* header */
+            .brand {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .app-logo {
+                height: 72px;
+                width: auto;
+            }
+
+            #themeToggle {
+                align-self: flex-end;
+                font-size: 13px;
+                padding: 6px 10px;
+            }
+
+            h1 {
+                font-size: 18px;
+                line-height: 1.3;
+            }
+
+            p.lead {
+                font-size: 13px;
+            }
+
+            /* quiz grid */
+            .quiz-grid {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+
+            .aside {
+                order: -1;
+                padding: 14px;
+            }
+
+            /* question */
+            .q-title {
+                font-size: 14px;
+            }
+
+            /* options → full width tappable */
+            .options {
+                flex-direction: column;
+            }
+
+            .option {
+                width: 100%;
+                text-align: left;
+                padding: 12px;
+                font-size: 14px;
+            }
+
+            /* buttons */
+            .btn {
+                width: 100%;
+                justify-content: center;
+                font-size: 14px;
+                padding: 12px;
+            }
+
+            #prevBtn {
+                display: none;
+                /* swipe-like UX */
+            }
+
+            /* progress */
+            .progress {
+                height: 6px;
+            }
+
+            /* aside text */
+            .score-big {
+                font-size: 32px;
+            }
+
+            .coin-badge {
+                width: 56px;
+                height: 56px;
+                font-size: 18px;
+            }
+
+            /* gauge */
+            #paisaGauge {
+                width: 130px;
+                height: auto;
+            }
+
+            /* overlay */
+            .overlay {
+                padding: 8px;
+            }
+
+            .result-card {
+                flex-direction: column;
+                padding: 14px;
+                max-height: 100vh;
+                overflow-y: auto;
+            }
+
+            .result-left {
+                max-height: none;
+                overflow: visible;
+            }
+
+            .result-right {
+                width: 100%;
+                position: relative;
+                margin-top: 12px;
+            }
+
+            /* contact modal */
+            .contact-modal {
+                padding: 14px;
+            }
+
+            .field input {
+                font-size: 14px;
+            }
+
+            /* vault page */
+            .vault-page {
+                padding: 14px;
+            }
+
+            .balance .big {
+                font-size: 26px;
+            }
+
+            footer {
+                font-size: 12px;
+                padding: 10px 0;
+            }
+        }
+
+        /* touch improvement */
+        .option,
+        .btn {
+            -webkit-tap-highlight-color: transparent;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="brand">
+            <!-- <div class="logo">₹T</div> -->
+            <div class="logo-container">
+                <img src="logo-1.png" alt="PaisaBada Logo" class="app-logo">
+            </div>
+
+            <!-- THEME TOGGLE BUTTON -->
+            <button id="themeToggle" style="margin-left:auto;padding:8px 14px;border-radius:8px;
+               border:1px solid rgba(255,255,255,0.2);cursor:pointer;
+               background:var(--glass);color:var(--muted);font-weight:600;">
+                🌙 Dark
+            </button>
+            <div>
+                <h1>Paisabada — Financial Health Scan</h1>
+                <p class="lead">Science-based 10 questions → Universal score → Immediate actions + 100 ₹C into your
+                    Wealth Chamber.</p>
+            </div>
+        </div>
+
+        <div class="card quiz-grid" id="quizCard">
+            <div>
+                <div id="questionArea">
+                    <!-- questions inserted by JS -->
+                </div>
+
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px">
+                    <div class="small muted-sm" id="qCount">Question 1/10</div>
+                    <div style="display:flex;gap:8px;align-items:center">
+                        <button class="btn btn-ghost" id="prevBtn" aria-label="Previous" disabled>Previous</button>
+                        <button class="btn btn-primary" id="nextBtn" aria-label="Next">Next</button>
+                    </div>
+                </div>
+
+                <div class="progress" aria-hidden="true" style="margin-top:10px">
+                    <span id="progBar" style="width:0%"></span>
+                </div>
+            </div>
+
+            <aside class="aside">
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                    <div>
+                        <div class="small">Estimated Financial Age</div>
+                        <div class="score-big" id="estAge">—</div>
+                        <div class="small muted-sm">Your baseline score will display here</div>
+                        <div class="meter-track" aria-hidden style="margin-top:8px">
+                            <div class="meter-fill" id="meterFill" style="width:0%"></div>
+                        </div>
+                        <div class="rainbow-meter" style="margin-top:8px;border-radius:8px;overflow:hidden">
+                            <div id="rainbowFill" style="width:0%;height:12px;border-radius:8px;background:transparent">
+                            </div>
+                        </div>
+
+                        <!-- NEW: LIVE SEMI-CIRCLE GAUGE (added without changing existing logic) -->
+                        <div style="margin-top:10px;">
+                            <div style="display:flex;align-items:center;gap:12px">
+                                <div style="width:160px;height:90px;">
+                                    <!-- semicircle gauge SVG -->
+                                    <svg id="paisaGauge" viewBox="0 0 200 110" width="160" height="88" aria-hidden>
+                                        <path id="zone1" d="M20,90 A80,80 0 0,1 60,20" stroke="#ff5c5c"
+                                            stroke-width="18" fill="none" stroke-linecap="round" />
+                                        <path id="zone2" d="M60,20 A80,80 0 0,1 110,10" stroke="#ffb86b"
+                                            stroke-width="18" fill="none" stroke-linecap="round" />
+                                        <path id="zone3" d="M110,10 A80,80 0 0,1 160,30" stroke="#ffd166"
+                                            stroke-width="18" fill="none" stroke-linecap="round" />
+                                        <path id="zone4" d="M160,30 A80,80 0 0,1 180,90" stroke="#00d27a"
+                                            stroke-width="18" fill="none" stroke-linecap="round" />
+                                        <path d="M20,90 A80,80 0 0,1 180,90" stroke="rgba(255,255,255,0.04)"
+                                            stroke-width="20" fill="none" />
+                                        <g id="needleGroup" transform="translate(100,90) rotate(-90)">
+                                            <line id="gaugeNeedle" x1="0" y1="0" x2="0" y2="-68" stroke="#9aa4b2"
+                                                stroke-width="4" stroke-linecap="round" />
+                                            <circle cx="0" cy="0" r="6" fill="#071026" stroke="#fff"
+                                                stroke-width="1.5" />
+                                        </g>
+                                    </svg>
+                                </div>
+
+                                <div style="flex:1">
+                                    <div style="font-size:13px;color:var(--muted)">Health Meter</div>
+                                    <div style="display:flex;align-items:baseline;gap:10px">
+                                        <div id="gaugeValue" style="font-weight:800;font-size:22px">—</div>
+                                        <div style="font-size:13px;color:var(--muted)">Score</div>
+                                    </div>
+                                    <div id="gaugeLabel" style="margin-top:6px;font-size:13px;color:var(--muted)">—
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END NEW GAUGE -->
+
+                        <div id="benchmarkNote" class="small-note">Benchmarks: Avg Indian saving ≈ 8% of income.
+                            <strong>20%+</strong> is top performers.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="coin-row">
+                    <div class="coin-badge" aria-hidden>+100</div>
+                    <div>
+                        <div style="font-weight:700">Welcome Bonus</div>
+                        <div class="muted-block">Complete the scan & activate your Vault</div>
+                    </div>
+                </div>
+
+                <div style="margin-top:14px" class="muted-sm">
+                    <strong>Free coins cap:</strong> <span style="font-weight:700">200 ₹C</span><br>
+                    Coins convert from product commissions at <strong>80%</strong>.
+                </div>
+            </aside>
+        </div>
+
+        <!-- Result Overlay -->
+        <div class="overlay" id="resultOverlay" role="dialog" aria-modal="true" aria-hidden="true">
+            <div class="result-card" role="document">
+                <div class="result-left">
+                    <div style="display:flex;align-items:center;gap:12px">
+                        <div class="vault-door" id="vaultDoor" aria-hidden>
+                            <div class="door-icon">🔐</div>
+                        </div>
+                        <div>
+                            <div style="font-weight:800;font-size:22px">Wealth Scan Complete</div>
+                            <div class="muted-sm">Your Financial Age has been estimated. 100 ₹C ready to be activated
+                                into your Wealth Chamber.</div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:18px">
+                        <div id="oneLineDiagnosis" style="font-weight:700;font-size:14px;color:var(--gold)"></div>
+                        <div style="font-weight:700;font-size:16px;margin-top:8px">Score Summary</div>
+                        <div style="display:flex;gap:12px;margin-top:10px">
+                            <div class="pill">Savings: <strong id="savingsScore">—</strong></div>
+                            <div class="pill">Protection: <strong id="protScore">—</strong></div>
+                            <div class="pill">Investment: <strong id="invScore">—</strong></div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:18px">
+                        <div style="font-weight:700">Personalised Suggestions</div>
+                        <div id="suggestions" class="muted-sm" style="margin-top:8px;line-height:1.5">
+                            <!-- suggestions injected here -->
+                        </div>
+                    </div>
+
+                    <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap">
+                        <button class="btn btn-ghost" id="downloadPdfBtn">Download PDF Report</button>
+                        <button class="btn btn-ghost" id="closeOverlay">Close</button>
+                    </div>
+                </div>
+
+                <div class="result-right">
+                    <div style="display:flex;align-items:center;justify-content:space-between">
+                        <div style="font-weight:700">Instant Reward</div>
+                        <div class="small muted-sm">Free coins (cap 200)</div>
+                    </div>
+                    <div style="margin-top:12px" class="coin-roller" id="coinRoll">+100 ₹C</div>
+
+                    <div style="margin-top:16px">
+                        <div style="font-weight:700">Vault Preview</div>
+                        <div class="ledger" id="ledgerPreview" style="margin-top:8px">Opening Balance: 0<br>+100 ₹C
+                            (Welcome Bonus)</div>
+                    </div>
+
+                    <div style="margin-top:14px">
+                        <div style="font-weight:700">Vault Animation</div>
+                        <div id="lottieBox" style="width:100%;height:110px;margin-top:8px"></div>
+                    </div>
+
+                    <!-- Single Activate button under Instant Reward -->
+                    <div style="margin-top:16px;display:flex;gap:8px;flex-direction:column">
+                        <button class="btn btn-primary" id="activateRightBtn">SignUp - Into Vault</button>
+                        <div id="sentConfirmations" style="margin-top:8px;font-size:13px;color:var(--muted)"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vault mock (after activation) -->
+        <div id="vaultMock" class="vault-page" aria-live="polite">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+                <div>
+                    <div class="small">WEALTH CHAMBER</div>
+                    <div class="balance" style="margin-top:6px">
+                        <div class="big" id="vaultBalance">0 ₹C</div>
+                        <div class="pill" id="vaultTier">Level: Explorer</div>
+                    </div>
+                    <div class="muted-sm" style="margin-top:6px">Free coins cap: <strong>200 ₹C</strong> • Commission
+                        conversion: <strong>80%</strong>.</div>
+                    <div class="actions">
+                        <button class="btn btn-primary" id="reinvestBtn">Reinvest Coins</button>
+                        <button class="btn btn-ghost" id="viewLedgerBtn">View Ledger</button>
+                    </div>
+                </div>
+
+                <div style="max-width:360px">
+                    <div style="font-weight:700">Quick Missions</div>
+                    <ul style="padding-left:18px;margin-top:8px;color:var(--muted);line-height:1.6">
+                        <li>Set financial goal → +50 ₹C</li>
+                        <li>Refer friend → +100 ₹C</li>
+                        <li>Complete KYC → +25 ₹C</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="margin-top:14px">
+                <div style="font-weight:700">Ledger</div>
+                <pre class="ledger" id="fullLedger" style="margin-top:8px">No transactions yet.</pre>
+            </div>
+        </div>
+
+        <footer>By continuing you agree to Paisabada Terms & Privacy. Coins are non-withdrawable; usable only within
+            Paisabada ecosystem.</footer>
+    </div>
+
+
+    <!-- Hidden: Contact & OTP overlay (we reuse the same overlay container to avoid stacking) -->
+    <!-- <div id="contactOverlay" class="overlay" style="display:none;align-items:center;"> -->
+    <!-- <div class="contact-modal" id="contactModal" role="dialog" aria-modal="true" aria-hidden="true"> -->
+    <!-- <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                <div style="font-weight:800;font-size:18px">Verify your contact</div>
+                <button class="btn btn-ghost" id="closeContactBtn">Close</button>
+            </div> -->
+
+    <!-- <div id="contactStage"> -->
+    <!-- Stage 1: ask mobile + email -->
+    <!-- <div id="stageContact">
+                    <div class="field">
+                        <label for="mobileInp">Mobile number (WhatsApp)</label>
+                        <input id="mobileInp" type="tel" placeholder="e.g. 9876543210" maxlength="10"
+                            inputmode="numeric">
+                    </div>
+                    <div class="field">
+                        <label for="emailInp">Email address</label>
+                        <input id="emailInp" type="email" placeholder="you@example.com">
+                    </div>
+                    <div style="display:flex;gap:8px;align-items:center">
+                        <button class="btn btn-primary" id="sendOtpBtn">Send OTP</button>
+                        <div class="small-muted">A one-time code will be sent to both mobile & email.</div>
+                    </div>
+                </div> -->
+
+    <!-- Stage 2: OTP inputs -->
+    <!-- <div id="stageOtp" style="display:none">
+                    <div class="small-muted" id="otpSentNote">OTP sent to •••••</div>
+
+                    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:8px">
+                        <div style="flex:1">
+                            <label class="small-muted">Mobile OTP</label>
+                            <input id="mobileOtp" placeholder="Enter mobile OTP" />
+                            <div class="otp-row">
+                                <button class="btn btn-primary" id="verifyMobileOtpBtn">Verify Mobile OTP</button>
+                                <button class="btn btn-ghost" id="resendMobileOtpBtn">Resend</button>
+                                <div id="mobileOtpTimer" class="small-muted" style="margin-left:6px"></div>
+                            </div>
+                        </div>
+
+                        <div style="flex:1">
+                            <label class="small-muted">Email OTP</label>
+                            <input id="emailOtp" placeholder="Enter email OTP" />
+                            <div class="otp-row">
+                                <button class="btn btn-primary" id="verifyEmailOtpBtn">Verify Email OTP</button>
+                                <button class="btn btn-ghost" id="resendEmailOtpBtn">Resend</button>
+                                <div id="emailOtpTimer" class="small-muted" style="margin-left:6px"></div>
+                            </div>
+                        </div>
+                    </div> -->
+
+    <!-- <div style="margin-top:12px;display:flex;gap:8px;align-items:center">
+                        <button class="btn btn-primary" id="finalizeActivationBtn" disabled>Complete Verification &
+                            Activate Vault</button>
+                        <div id="verificationStatus" class="small-muted"></div>
+                    </div> -->
+    <!-- </div> -->
+    <!-- </div> -->
+    <!-- </div> -->
+    <!-- </div> -->
+
+    <!-- Libraries -->
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <script>
+        document.getElementById("activateRightBtn").addEventListener("click", () => {
+            window.location.href = "https://paisabada.in/signup.html";
+        });
+    </script>
+
+
+    <script>
+        /* -------------------------------
+           Existing quiz + vault + gauge code (kept same logic)
+           ------------------------------- */
+
+        /* QUESTIONS data */
+        const QUESTIONS = [
+            { id: 1, q: "Q1. Aapki monthly savings kitni hoti hai? (Savings habit)", type: 'slider', opts: [0, 10, 20, 30], labels: ["0%", "<10%", "10–20%", "20%+"], weight: [0, 1, 2, 3] },
+            { id: 10, q: "Q2. Aapke paas written financial goals hain?", type: 'single', opts: ["Nahi", "Dimaag me", "Basic goals likhe", "Proper goal plan + timeline"], weight: [0, 1, 2, 3] },
+            { id: 2, q: "Q3. Aapke paas emergency fund kitne months ka hai? (Financial shock protection)", type: 'single', opts: ["Nahi hai", "1–2 months", "3–6 months", "6+ months"], weight: [0, 1, 2, 3] },
+            { id: 5, q: "Q4. Aapke EMIs income ke kitne % hain? (Debt stress)", type: 'slider', opts: [60, 40, 20, 5], labels: ["50%+", "30–50%", "10–30%", "<10%"], weight: [0, 1, 2, 3] },
+            { id: 3, q: "Q5. Aapke paas health insurance coverage hai?", type: 'single', opts: ["Nahi", "Aadhe family ko", "Pure family ko basic cover", "Pure family ko adequate cover"], weight: [0, 1, 2, 3] },
+            { id: 4, q: "Q6. Aapke paas life/term insurance coverage hai?", type: 'single', opts: ["Nahi", "LIC/Traditional only", "Term + incorrect sum assured", "Term + correct coverage"], weight: [0, 1, 2, 3] },
+            { id: 6, q: "Q7. Aapki investments kis ratio me hain? (Growth readiness)", type: 'single', opts: ["Sirf FD / cash", "Zyada FD / thoda SIP", "Balanced — SIP + FD + Insurance", "SIP + Equity + Diversification"], weight: [0, 1, 2, 3] },
+            { id: 9, q: "Q8. Insurance & investment decisions kaise lete ho? (Awareness & behaviour)", type: 'single', opts: ["Agent/relative bolta hai", "Thoda research karta hoon", "Compare karke leta hoon", "Needs-based scientific approach"], weight: [0, 1, 2, 3] },
+            { id: 8, q: "Q9. (Follow-up) Aapka goal setting kitna detailed hai?", type: 'single', opts: ["Nahi", "Rough idea", "Basic milestones", "Detailed with timelines"], weight: [0, 1, 2, 3] },
+            { id: 7, q: "Q10. Aapke paas retirement plan defined hai? (Long-term stability)", type: 'slider', opts: [0, 10, 20, 30], labels: ["Socha nahi", "Thodo socha", "Saving chal raha", "Clear plan + investments"], weight: [0, 1, 2, 3] }
+        ];
+
+        let answers = {};
+        let current = 0;
+        const totalQ = QUESTIONS.length;
+
+        const qArea = document.getElementById('questionArea');
+        const qCount = document.getElementById('qCount');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const progBar = document.getElementById('progBar');
+        const estAge = document.getElementById('estAge');
+
+        let flags = { no_health: false, low_emergency: false, high_debt: false, no_term: false };
+
+        function renderQuestion(index) {
+            const Q = QUESTIONS[index];
+            qArea.innerHTML = '';
+            const container = document.createElement('div');
+            container.className = 'question';
+            const title = document.createElement('div');
+            title.className = 'q-title';
+            title.textContent = Q.q;
+            container.appendChild(title);
+
+            if (Q.type === 'single') {
+                const opts = document.createElement('div'); opts.className = 'options';
+                Q.opts.forEach((o, i) => {
+                    const b = document.createElement('div');
+                    b.className = 'option';
+                    b.tabIndex = 0; b.setAttribute('role', 'button'); b.setAttribute('aria-pressed', 'false');
+                    b.textContent = `${String.fromCharCode(65 + i)}. ${o}`;
+                    const sel = answers[Q.id];
+                    if (sel === o) b.classList.add('active');
+                    b.addEventListener('click', () => {
+                        answers[Q.id] = o;
+                        b.parentElement.querySelectorAll('.option').forEach(x => x.classList.remove('active'));
+                        b.classList.add('active');
+                        setTimeout(() => {
+                            if (current < totalQ - 1) { current++; renderQuestion(current); } else { showResult(); }
+                        }, 240);
+                    });
+                    opts.appendChild(b);
+                });
+                container.appendChild(opts);
+
+            } else if (Q.type === 'slider') {
+                const sliderRow = document.createElement('div'); sliderRow.className = 'slider-row';
+                const range = document.createElement('input');
+                range.type = 'range';
+                range.min = 0; range.max = 3; range.step = 1;
+                range.value = answers[Q.id] !== undefined ? answers[Q.id] : 0;
+                const labelRow = document.createElement('div'); labelRow.style.display = 'flex'; labelRow.style.justifyContent = 'space-between'; labelRow.style.marginTop = '6px';
+                const labels = Q.labels || Q.opts.map((_, i) => Q.opts[i]);
+                labels.forEach((lab, i) => {
+                    const sp = document.createElement('div'); sp.style.fontSize = '13px'; sp.style.color = 'var(--muted)'; sp.textContent = lab;
+                    labelRow.appendChild(sp);
+                });
+                const valueBubble = document.createElement('div'); valueBubble.className = 'small'; valueBubble.style.marginTop = '6px'; valueBubble.textContent = labels[range.value];
+                range.oninput = () => {
+                    valueBubble.textContent = labels[range.value];
+                    answers[Q.id] = parseInt(range.value, 10);
+                    estimateAgePreview();
+                };
+                answers[Q.id] = parseInt(range.value, 10);
+                sliderRow.appendChild(range);
+                sliderRow.appendChild(valueBubble);
+                sliderRow.appendChild(labelRow);
+                container.appendChild(sliderRow);
+
+                if (Q.id === 1) {
+                    const bench = document.createElement('div'); bench.className = 'small-note';
+                    bench.innerHTML = 'Benchmark: Average saving in India ≈ <strong>8%</strong>. Aim for <strong>20%+</strong>.';
+                    container.appendChild(bench);
+                }
+                if (Q.id === 5) {
+                    const bench = document.createElement('div'); bench.className = 'small-note';
+                    bench.innerHTML = 'Benchmark: EMI < 30% is healthy. >50% is high risk.';
+                    container.appendChild(bench);
+                }
+                if (Q.id === 7) {
+                    const bench = document.createElement('div'); bench.className = 'small-note';
+                    bench.innerHTML = 'Retirement: Clear plan reduces future dependency risk.';
+                    container.appendChild(bench);
+                }
+            }
+
+            qArea.appendChild(container);
+
+            qCount.textContent = `Question ${index + 1}/${totalQ}`;
+            progBar.style.width = `${Math.round(((index) / totalQ) * 100)}%`;
+            prevBtn.disabled = index === 0;
+            nextBtn.textContent = index === totalQ - 1 ? 'Finish' : 'Next';
+
+            estimateAgePreview();
+        }
+
+        prevBtn.addEventListener('click', () => { if (current > 0) { current--; renderQuestion(current); } });
+        nextBtn.addEventListener('click', () => {
+            if (current < totalQ - 1) {
+                const Q = QUESTIONS[current];
+                if (Q.type === 'single' && !answers[Q.id]) { alert('Please select an option to continue'); return; }
+                current++; renderQuestion(current);
+            } else {
+                const Q = QUESTIONS[current];
+                if (Q.type === 'single' && !answers[Q.id]) { alert('Please select an option to finish'); return; }
+                showResult();
+            }
+        });
+
+        /* Scoring & flags */
+        function computeCompactScore() {
+            let total = 0;
+            QUESTIONS.forEach(q => {
+                let val = 0;
+                if (q.type === 'single') {
+                    const sel = answers[q.id];
+                    const idx = sel ? q.opts.indexOf(sel) : 0;
+                    val = q.weight[idx] || 0;
+                } else if (q.type === 'slider') {
+                    val = answers[q.id] !== undefined ? answers[q.id] : 0;
+                }
+                total += val;
+            });
+            return total;
+        }
+        function setFlags() {
+            const q2SelIndex = getAnswerIndex(2); flags.low_emergency = (q2SelIndex <= 1);
+            const q3SelIndex = getAnswerIndex(3); flags.no_health = (q3SelIndex === 0);
+            const q4SelIndex = getAnswerIndex(4); flags.no_term = (q4SelIndex === 0);
+            const q5Slider = answers[5] !== undefined ? answers[5] : 0; flags.high_debt = (q5Slider <= 1);
+        }
+        function getAnswerIndex(id) {
+            const q = QUESTIONS.find(x => x.id === id);
+            if (!q) return 0;
+            if (q.type === 'single') {
+                const sel = answers[id];
+                return sel ? q.opts.indexOf(sel) : 0;
+            } else if (q.type === 'slider') {
+                return answers[id] !== undefined ? answers[id] : 0;
+            }
+            return 0;
+        }
+
+        /* Result overlay logic */
+        function showResult() {
+            const savings = computeSavingsScore();
+            const prot = computeProtectionScore();
+            const inv = computeInvestmentScore();
+            document.getElementById('savingsScore').textContent = savings;
+            document.getElementById('protScore').textContent = prot;
+            document.getElementById('invScore').textContent = inv;
+
+            setFlags();
+
+            const diagEl = document.getElementById('oneLineDiagnosis');
+            let diag = '', action = '';
+            if (flags.no_health) { diag = 'Immediate gap: No Health Cover for family.'; action = 'Buy a basic family health cover (₹3–5L) today.'; }
+            else if (flags.low_emergency) { diag = 'Immediate gap: Emergency fund below 3 months.'; action = 'Start an emergency fund: aim for 3 months expenses.'; }
+            else if (flags.high_debt) { diag = 'Immediate gap: High EMI load detected.'; action = 'Consider debt consolidation or reducing high-interest loans.'; }
+            else if (flags.no_term) { diag = 'Consider: No Term Insurance found.'; action = 'Get term cover equal to 10–15x annual income.'; }
+            else { diag = 'No immediate critical gaps detected. Focus on growth & optimisation.'; action = 'Automate SIPs and set goal-based allocations.'; }
+            diagEl.innerHTML = `${diag} <div style="font-weight:600;color:#d1f7e0;margin-top:6px">${action}</div>`;
+
+            document.getElementById('suggestions').innerHTML = generateSuggestions(savings, prot, inv);
+
+            const overlay = document.getElementById('resultOverlay');
+            overlay.classList.add('active', 'fade-in');
+            overlay.setAttribute('aria-hidden', 'false');
+            // block background scroll
+            document.documentElement.style.overflow = 'hidden';
+            document.body.style.overflow = 'hidden';
+
+            setTimeout(() => document.getElementById('vaultDoor').classList.add('open'), 450);
+            animateCoinRoll(100);
+            document.getElementById('ledgerPreview').textContent = "Opening Balance: 0\n+100 ₹C (Welcome Bonus)";
+            loadLottie();
+        }
+        function computeSavingsScore() {
+            let s = 0;
+            const q1 = answers[1] !== undefined ? answers[1] : 0;
+            s += q1 * 25 / 3;
+            const q2 = getAnswerIndex(2);
+            s += q2 * 25 / 3;
+            return Math.min(100, Math.round(s));
+        }
+        function computeProtectionScore() {
+            const q3 = getAnswerIndex(3), q4 = getAnswerIndex(4);
+            let s = q3 * 50 / 3 + q4 * 50 / 3;
+            return Math.min(100, Math.round(s));
+        }
+        function computeInvestmentScore() {
+            const q6 = getAnswerIndex(6);
+            const q5 = answers[5] !== undefined ? answers[5] : 0;
+            const q7 = answers[7] !== undefined ? answers[7] : 0;
+            let s = q6 * 40 / 3 + q5 * 30 / 3 + q7 * 30 / 3;
+            return Math.min(100, Math.round(s));
+        }
+        function generateSuggestions(savings, prot, inv) {
+            const lines = [];
+            if (flags.no_health) lines.push("<strong>Health:</strong> No family health cover detected. Buy a basic family floater (₹3–5L) immediately.");
+            if (flags.low_emergency) lines.push("<strong>Emergency:</strong> Build 3 months buffer — start with small SIP targeted for emergencies.");
+            if (flags.high_debt) lines.push("<strong>Debt:</strong> EMI load high. Prioritise high-interest reductions and consider consolidation.");
+            if (flags.no_term) lines.push("<strong>Term:</strong> Consider term cover (10–15x income) for family protection.");
+            if (savings < 30) lines.push("<strong>Savings:</strong> Automate 10% monthly via SIPs; aim 20% over time.");
+            else if (savings < 70) lines.push("<strong>Savings:</strong> Good — increase SIP amount annually with salary hikes.");
+            else lines.push("<strong>Savings:</strong> Strong savings habit. Deploy into diversified equity for long-term growth.");
+            if (inv < 40) lines.push("<strong>Invest:</strong> Start small SIPs (₹500–2000). Diversify across large-cap and balanced funds.");
+            else lines.push("<strong>Invest:</strong> Rebalance annually; use goal-based SIPs for child/retirement goals.");
+            lines.push("<em>Activate Wealth Chamber to get +100 ₹C and a personalised 15-min advisory call.</em>");
+            return lines.map(l => `<div style="margin-bottom:8px">${l}</div>`).join('');
+        }
+        function animateCoinRoll(target) {
+            const el = document.getElementById('coinRoll');
+            let start = 0;
+            const step = Math.max(1, Math.round(target / 20));
+            const t = setInterval(() => {
+                start += step;
+                if (start >= target) { start = target; clearInterval(t); }
+                el.textContent = '+' + start + ' ₹C';
+            }, 30);
+        }
+        function loadLottie() {
+            const box = document.getElementById('lottieBox'); box.innerHTML = '';
+            const l = document.createElement('lottie-player');
+            l.setAttribute('src', 'https://assets4.lottiefiles.com/packages/lf20_x62chJ.json');
+            l.setAttribute('background', 'transparent'); l.setAttribute('speed', '1');
+            l.setAttribute('style', 'width:100%;height:110px;'); l.setAttribute('loop', 'false');
+            box.appendChild(l); l.play();
+        }
+
+        /* Vault activation state and functions */
+        let vaultState = { balance: 0, ledger: [] };
+        function getCurrentFreeCoins() {
+            return vaultState.ledger.filter(t => t.reason === 'Welcome Bonus' || t.reason === 'Free Promo').reduce((s, t) => s + (t.type === 'credit' ? t.amount : 0), 0);
+        }
+        function updateTier() { const b = vaultState.balance; const tierEl = document.getElementById('vaultTier'); if (b >= 10000) tierEl.textContent = 'Level: Platinum'; else if (b >= 2000) tierEl.textContent = 'Level: Gold'; else if (b >= 500) tierEl.textContent = 'Level: Silver'; else tierEl.textContent = 'Level: Explorer'; }
+        function renderLedger() { const full = document.getElementById('fullLedger'); full.textContent = vaultState.ledger.map(l => { const d = new Date(l.ts).toLocaleString(); const sign = l.type === 'credit' ? '+' : '-'; return `${d}  ${sign}${l.amount} ₹T  — ${l.reason}`; }).join('\n'); }
+
+        /* Reinvest & ledger view */
+        document.getElementById('reinvestBtn').addEventListener('click', () => {
+            if (vaultState.balance <= 0) { alert('No coins available to reinvest'); return; }
+            const use = Math.min(Math.floor(vaultState.balance), 100);
+            if (!confirm(`Use ${use} ₹C to start a SIP?`)) return;
+            vaultState.balance -= use;
+            vaultState.ledger.push({ type: 'debit', amount: use, reason: 'SIP Reinvestment', ts: new Date().toISOString() });
+            document.getElementById('vaultBalance').textContent = vaultState.balance + ' ₹T';
+            updateTier(); renderLedger();
+            showToast('SIP started using ' + use + ' ₹C (demo). Backend integration required to place real order.');
+        });
+        document.getElementById('viewLedgerBtn').addEventListener('click', () => {
+            const full = document.getElementById('fullLedger'); full.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+
+        /* Download PDF button preserved */
+        document.getElementById('downloadPdfBtn').addEventListener('click', async function () {
+            const reportNode = document.createElement('div');
+            reportNode.style.width = '800px'; reportNode.style.padding = '18px'; reportNode.style.background = '#071026'; reportNode.style.color = '#e6eef6'; reportNode.style.fontFamily = 'Inter, Arial, sans-serif';
+            const fa = estAge.textContent || '—';
+            const savings = document.getElementById('savingsScore').textContent;
+            const prot = document.getElementById('protScore').textContent;
+            const inv = document.getElementById('invScore').textContent;
+            const answersHtml = Object.keys(answers).sort((a, b) => Number(a) - Number(b)).map(k => {
+                const q = QUESTIONS.find(x => x.id == k);
+                let val = answers[k];
+                if (q.type === 'slider') { const labels = q.labels || q.opts; val = labels[answers[k]] || answers[k]; }
+                else { val = Array.isArray(answers[k]) ? answers[k].join(', ') : answers[k] || '—'; }
+                return `<div><strong>${q.q}</strong><div style="color:#9aa4b2;margin-top:6px">${val}</div></div>`;
+            }).join('<br>');
+            const flagsList = [];
+            if (flags.no_health) flagsList.push('No Health Insurance for family');
+            if (flags.low_emergency) flagsList.push('Emergency fund < 3 months');
+            if (flags.high_debt) flagsList.push('High EMI burden (>30% or >50%)');
+            if (flags.no_term) flagsList.push('No Term Insurance');
+            const flagsHtml = flagsList.length ? flagsList.map(f => `• ${f}`).join('<br>') : 'No critical gaps flagged.';
+            const ledgerHtml = vaultState.ledger.length ? vaultState.ledger.map(l => `${new Date(l.ts).toLocaleString()} — ${l.type === 'credit' ? '+' : ''}-${l.amount} ₹C — ${l.reason}`).join('<br>') : 'No transactions yet';
+            reportNode.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
+      <div><h2 style="margin:0">Paisabada — Financial Health Report</h2><div style="color:#9aa4b2;margin-top:6px">Date: ${new Date().toLocaleString()}</div></div>
+      <div style="text-align:right"><div style="font-weight:800;font-size:22px">${fa} (Financial Age)</div><div style="color:#9aa4b2">Total Vault: ${vaultState.balance} ₹C</div></div>
+    </div>
+    <div style="margin-bottom:12px"><div style="font-weight:700;margin-bottom:6px">Critical Flags</div><div style="color:#ffddc1">${flagsHtml}</div></div>
+    <div style="display:flex;gap:16px;margin-bottom:12px">
+      <div style="flex:1;padding:12px;border-radius:8px;background:#0f1720"><div style="font-weight:700">Savings</div><div style="margin-top:8px">${savings}/100</div></div>
+      <div style="flex:1;padding:12px;border-radius:8px;background:#0f1720"><div style="font-weight:700">Protection</div><div style="margin-top:8px">${prot}/100</div></div>
+      <div style="flex:1;padding:12px;border-radius:8px;background:#0f1720"><div style="font-weight:700">Investment</div><div style="margin-top:8px">${inv}/100</div></div>
+    </div>
+    <div style="margin-bottom:12px"><div style="font-weight:700;margin-bottom:6px">Top Suggestion (One-line)</div><div style="color:#9aa4b2;margin-bottom:8px">${document.getElementById('oneLineDiagnosis').innerText}</div><div style="font-weight:700;margin-bottom:6px">Top Actions</div><div style="color:#9aa4b2">• ${actionTextForPdf()}</div></div>
+    <div style="margin-bottom:12px"><div style="font-weight:700;margin-bottom:6px">Your Answers</div><div style="color:#9aa4b2">${answersHtml}</div></div>
+    <div style="margin-bottom:12px"><div style="font-weight:700;margin-bottom:6px">Vault Ledger</div><div style="color:#9aa4b2">${ledgerHtml}</div></div>
+    <div style="margin-top:18px;color:#9aa4b2;font-size:12px">Notes: Coins are internal credits usable within Paisabada. For personalised planning, activate your Wealth Chamber.</div>`;
+            try {
+                const canvas = await html2canvas(reportNode, { scale: 2, backgroundColor: '#071026' });
+                const imgData = canvas.toDataURL('image/png');
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF({ orientation: 'portrait', unit: 'pt', format: [canvas.width, canvas.height] });
+                pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+                pdf.save('Paisabada-Financial-Report.pdf');
+                showToast('PDF downloaded');
+            } catch (e) {
+                alert('PDF generation failed: ' + e.message);
+            }
+        });
+        function actionTextForPdf() { if (flags.no_health) return 'Buy family health cover (₹3–5L).'; if (flags.low_emergency) return 'Start emergency SIP: aim 3 months expenses.'; if (flags.high_debt) return 'Review loans; prioritise high-interest payoff.'; if (flags.no_term) return 'Purchase term insurance 10–15x income.'; return 'Automate SIPs and set goal-based allocations.'; }
+        function showToast(msg) { const t = document.createElement('div'); t.textContent = msg; t.style.position = 'fixed'; t.style.right = '18px'; t.style.bottom = '18px'; t.style.background = 'linear-gradient(90deg,var(--accentA),var(--accentB))'; t.style.color = '#071026'; t.style.padding = '10px 14px'; t.style.borderRadius = '10px'; t.style.boxShadow = '0 10px 30px rgba(0,0,0,0.5)'; document.body.appendChild(t); setTimeout(() => t.style.opacity = '0', 2400); setTimeout(() => t.remove(), 3000); }
+
+        /* Init UI */
+        renderQuestion(0); estimateAgePreview();
+
+        /* Estimate & gauge */
+        function estimateAgePreview() {
+            let total = 0;
+            QUESTIONS.forEach(q => {
+                let val = 0;
+                if (q.type === 'single') { const sel = answers[q.id]; const idx = sel ? q.opts.indexOf(sel) : 0; val = q.weight[idx] || 0; }
+                else if (q.type === 'slider') { val = answers[q.id] !== undefined ? answers[q.id] : 0; }
+                total += val;
+            });
+            const baseAge = 35;
+            const finAge = Math.max(18, Math.min(60, baseAge + Math.round((30 - total) * 0.8) - 6));
+            estAge.textContent = finAge;
+            const composite = Math.round((total / 30) * 100);
+            const meterFillEl = document.getElementById('meterFill');
+            const rainbowFillEl = document.getElementById('rainbowFill');
+            if (meterFillEl) meterFillEl.style.width = composite + '%';
+            if (rainbowFillEl) rainbowFillEl.style.width = composite + '%';
+            try { if (typeof updateGauge === 'function') updateGauge(composite, finAge); } catch (e) { console.warn('Gauge update failed', e); }
+        }
+
+        /* Gauge helpers */
+        function compositeToAngle(c) { const minAngle = -110; const maxAngle = 110; return (minAngle + (c / 100) * (maxAngle - minAngle)); }
+        function updateGauge(composite, finAge) {
+            composite = Math.max(0, Math.min(100, composite));
+            const angle = compositeToAngle(composite);
+            const needle = document.getElementById('needleGroup');
+            needle.setAttribute('transform', `translate(100,90) rotate(${angle})`);
+            const gv = document.getElementById('gaugeValue');
+            if (gv) gv.textContent = (finAge !== undefined && finAge !== null) ? `${finAge} yrs` : `${composite}%`;
+            const label = document.getElementById('gaugeLabel');
+            if (label) {
+                let txt = '';
+                if (composite < 25) txt = 'At Risk — Fix protection & liquidity';
+                else if (composite < 50) txt = 'Building — secure emergency & reduce debt';
+                else if (composite < 75) txt = 'Growing — focus on SIPs & diversification';
+                else txt = 'Strong — keep compounding & diversify';
+                txt += ` • ${composite}% health`;
+                label.textContent = txt;
+            }
+            const zones = [document.getElementById('zone1'), document.getElementById('zone2'), document.getElementById('zone3'), document.getElementById('zone4')];
+            const zoneIndex = Math.min(3, Math.floor(composite / 25));
+            zones.forEach((z, i) => { if (!z) return; z.style.opacity = (i === zoneIndex ? '1' : '0.28'); });
+        }
+
+        /* -------------------------------
+           NEW: Contact + OTP flow (single activate button)
+           ------------------------------- */
+
+        /* Elements */
+        const activateRightBtn = document.getElementById('activateRightBtn');
+        const contactOverlay = document.getElementById('contactOverlay');
+        const contactModal = document.getElementById('contactModal');
+        const closeContactBtn = document.getElementById('closeContactBtn');
+
+        const mobileInp = document.getElementById('mobileInp');
+        const emailInp = document.getElementById('emailInp');
+        const sendOtpBtn = document.getElementById('sendOtpBtn');
+
+        const stageContact = document.getElementById('stageContact');
+        const stageOtp = document.getElementById('stageOtp');
+        const otpSentNote = document.getElementById('otpSentNote');
+        const mobileOtp = document.getElementById('mobileOtp');
+        const emailOtp = document.getElementById('emailOtp');
+        const verifyMobileOtpBtn = document.getElementById('verifyMobileOtpBtn');
+        const verifyEmailOtpBtn = document.getElementById('verifyEmailOtpBtn');
+        const resendMobileOtpBtn = document.getElementById('resendMobileOtpBtn');
+        const resendEmailOtpBtn = document.getElementById('resendEmailOtpBtn');
+        const mobileOtpTimer = document.getElementById('mobileOtpTimer');
+        const emailOtpTimer = document.getElementById('emailOtpTimer');
+        const finalizeActivationBtn = document.getElementById('finalizeActivationBtn');
+        const verificationStatus = document.getElementById('verificationStatus');
+        const sentConfirmations = document.getElementById('sentConfirmations');
+
+        let pendingActivationContext = {}; // keeps mobile/email for the flow
+        let mobileOTP = null, emailOTP = null;
+        let mobileVerified = false, emailVerified = false;
+        let resendIntervals = { mobile: null, email: null };
+
+        /* Helper validators */
+        function validMobile(m) { return /^\d{10}$/.test(m); }
+        function validEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
+
+        /* Open contact modal */
+        function openContactModal() {
+            contactOverlay.style.display = 'flex';
+            contactOverlay.classList.add('active');
+            contactModal.setAttribute('aria-hidden', 'false');
+
+            stageContact.style.display = 'block';
+            stageOtp.style.display = 'none';
+            mobileOtp.value = ''; emailOtp.value = '';
+            verificationStatus.textContent = '';
+            mobileVerified = false; emailVerified = false;
+            finalizeActivationBtn.disabled = true;
+            otpSentNote.textContent = '';
+        }
+        function closeContactModal() {
+            contactOverlay.style.display = 'none';
+            contactOverlay.classList.remove('active');
+            contactModal.setAttribute('aria-hidden', 'true');
+        }
+
+        /* Wire single activate button */
+        activateRightBtn.addEventListener('click', openContactModal);
+        closeContactBtn.addEventListener('click', closeContactModal);
+
+        /* Send OTP (simulated) */
+        sendOtpBtn.addEventListener('click', () => {
+            const mobile = (mobileInp.value || '').trim();
+            const email = (emailInp.value || '').trim().toLowerCase();
+            if (!validMobile(mobile)) { alert('Please enter a valid 10-digit mobile number'); return; }
+            if (!validEmail(email)) { alert('Please enter a valid email address'); return; }
+
+            pendingActivationContext = { mobile, email };
+            mobileOTP = String(Math.floor(100000 + Math.random() * 900000));
+            emailOTP = String(Math.floor(100000 + Math.random() * 900000));
+            mobileVerified = false; emailVerified = false;
+            finalizeActivationBtn.disabled = true;
+
+            otpSentNote.textContent = `OTP sent to ${maskMobile(mobile)} and ${maskEmail(email)}. (Demo shows OTPs in console)`;
+            console.log('Demo OTPs => mobile:', mobileOTP, 'email:', emailOTP);
+
+            stageContact.style.display = 'none';
+            stageOtp.style.display = 'block';
+
+            startResendTimer('mobile', 30);
+            startResendTimer('email', 30);
+
+            sentConfirmations.innerHTML = `OTP sent to <strong>${maskMobile(mobile)}</strong> (WhatsApp/SMS) and <strong>${email}</strong> (Email).`;
+        });
+
+        /* Mask helpers */
+        function maskMobile(m) { return m.replace(/^(\d{2})(\d{6})(\d{2})$/, '$1••••••$3'); }
+        function maskEmail(e) { const parts = e.split('@'); const name = parts[0]; const domain = parts[1] || ''; const visible = name.length <= 2 ? name[0] : name.substring(0, Math.min(2, name.length)); return visible + '•••@' + domain; }
+
+        /* Resend timer logic */
+        function startResendTimer(kind, seconds) {
+            let btn = kind === 'mobile' ? resendMobileOtpBtn : resendEmailOtpBtn;
+            let timerEl = kind === 'mobile' ? mobileOtpTimer : emailOtpTimer;
+            let remaining = seconds;
+            btn.disabled = true;
+            timerEl.textContent = `(${remaining}s)`;
+            if (resendIntervals[kind]) clearInterval(resendIntervals[kind]);
+            resendIntervals[kind] = setInterval(() => {
+                remaining--;
+                timerEl.textContent = remaining > 0 ? `(${remaining}s)` : '';
+                if (remaining <= 0) {
+                    clearInterval(resendIntervals[kind]); resendIntervals[kind] = null;
+                    btn.disabled = false;
+                    timerEl.textContent = '';
+                }
+            }, 1000);
+        }
+        resendMobileOtpBtn.addEventListener('click', () => {
+            if (!pendingActivationContext.mobile) return;
+            mobileOTP = String(Math.floor(100000 + Math.random() * 900000));
+            console.log('Resent Mobile OTP (demo):', mobileOTP);
+            otpSentNote.textContent = `New OTP sent to ${maskMobile(pendingActivationContext.mobile)} (demo).`;
+            startResendTimer('mobile', 30);
+        });
+        resendEmailOtpBtn.addEventListener('click', () => {
+            if (!pendingActivationContext.email) return;
+            emailOTP = String(Math.floor(100000 + Math.random() * 900000));
+            console.log('Resent Email OTP (demo):', emailOTP);
+            otpSentNote.textContent = `New OTP sent to ${maskEmail(pendingActivationContext.email)} (demo).`;
+            startResendTimer('email', 30);
+        });
+
+        /* Verify OTP buttons */
+        verifyMobileOtpBtn.addEventListener('click', () => {
+            const val = (mobileOtp.value || '').trim();
+            if (!val) { alert('Enter mobile OTP'); return; }
+            if (val === mobileOTP) { mobileVerified = true; verificationStatus.textContent = 'Mobile verified ✓'; verifyMobileOtpBtn.disabled = true; mobileOtp.disabled = true; checkBothVerified(); showToast('Mobile verified'); }
+            else { alert('Invalid mobile OTP'); }
+        });
+        verifyEmailOtpBtn.addEventListener('click', () => {
+            const val = (emailOtp.value || '').trim();
+            if (!val) { alert('Enter email OTP'); return; }
+            if (val === emailOTP) { emailVerified = true; verificationStatus.textContent = (mobileVerified ? 'Both verified ✓' : 'Email verified ✓'); verifyEmailOtpBtn.disabled = true; emailOtp.disabled = true; checkBothVerified(); showToast('Email verified'); }
+            else { alert('Invalid email OTP'); }
+        });
+        function checkBothVerified() { if (mobileVerified && emailVerified) { finalizeActivationBtn.disabled = false; verificationStatus.textContent = 'Both contacts verified. You can complete activation.'; } }
+
+        /* Finalize activation after both OTPs ok */
+        finalizeActivationBtn.addEventListener('click', async () => {
+            await finalizeActivationConfirmed(pendingActivationContext.mobile, pendingActivationContext.email);
+        });
+
+        /* Activation logic after verification */
+        async function finalizeActivationConfirmed(mobile, email) {
+            const freeCoinsCap = 200;
+            const currentFree = getCurrentFreeCoins();
+            let addable = Math.max(0, Math.min(100, freeCoinsCap - currentFree));
+            addable = Math.min(addable, 100);
+            if (addable <= 0) {
+                showToast('Free coins cap reached.');
+                closeContactModal(); return;
+            }
+
+            vaultState.balance += addable;
+            vaultState.ledger.push({ type: 'credit', amount: addable, reason: 'Welcome Bonus', ts: new Date().toISOString() });
+            document.getElementById('vaultBalance').textContent = vaultState.balance + ' ₹C';
+            updateTier(); renderLedger();
+
+            closeContactModal();
+            document.getElementById('resultOverlay').classList.remove('active');
+            document.getElementById('resultOverlay').setAttribute('aria-hidden', 'true');
+            document.documentElement.style.overflow = ''; document.body.style.overflow = '';
+
+            showToast('Vault activated — +' + addable + ' ₹C credited.');
+            const rightConfirm = document.getElementById('sentConfirmations');
+            rightConfirm.innerHTML = `<div style="color:#9aa4b2">Confirmation sent to WhatsApp: <strong>${maskMobile(mobile)}</strong> and Email: <strong>${email}</strong></div>`;
+
+            document.getElementById('ledgerPreview').textContent = `Opening Balance: 0\n+${addable} ₹C (Welcome Bonus)\nActivated: ${new Date().toLocaleString()}\nContact: ${maskMobile(mobile)} | ${email}`;
+
+            showToast('Confirmation sent via WhatsApp & Email (demo).');
+        }
+
+        /* Prevent accidental background scroll when overlays up */
+        document.getElementById('closeOverlay').addEventListener('click', () => {
+            document.getElementById('resultOverlay').classList.remove('active');
+            document.getElementById('resultOverlay').setAttribute('aria-hidden', 'true');
+            document.documentElement.style.overflow = '';
+            document.body.style.overflow = '';
+        });
+
+        /* Small helpers kept above */
+
+    </script>
+
+    <script>
+        /* ----------------------------------
+DARK/LIGHT MODE TOGGLE
+---------------------------------- */
+        const themeBtn = document.getElementById("themeToggle");
+
+        // Load saved preference
+        if (localStorage.getItem("theme") === "light") {
+            document.body.classList.add("light");
+            themeBtn.textContent = "☀️ Light";
+        }
+
+        themeBtn.addEventListener("click", () => {
+            const isLight = document.body.classList.toggle("light");
+            themeBtn.textContent = isLight ? "☀️ Light" : "🌙 Dark";
+            localStorage.setItem("theme", isLight ? "light" : "dark");
+        });
+
+    </script>
+</body>
+
+</html>
