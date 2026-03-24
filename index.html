@@ -137,7 +137,8 @@
             border-radius: 10px;
             border: 0;
             cursor: pointer;
-            font-weight: 700
+            font-weight: 700;
+
         }
 
         .btn-primary {
@@ -842,6 +843,63 @@
         .btn {
             -webkit-tap-highlight-color: transparent;
         }
+
+       
+
+        @media (max-width: 640px) {
+
+            /* RESULT POPUP CARD */
+            .result-card {
+                flex-direction: column;
+                width: 100%;
+                max-width: 100%;
+                padding: 16px;
+                border-radius: 12px;
+
+                max-height: 95vh;
+                overflow-y: auto;
+            }
+
+            .result-left {
+                width: 100%;
+                max-height: none;
+                overflow: visible;
+                padding: 0;
+            }
+
+            .result-right {
+                width: 100%;
+                position: relative;
+                top: 0;
+                margin-top: 16px;
+            }
+
+            /* OVERLAY padding fix */
+            .overlay {
+                padding: 10px;
+                align-items: center;
+                justify-content: center;
+            }
+
+            /* LOCK POPUP (Result Locked wala) */
+            #loginPopupWrapper>div {
+                padding: 16px;
+                align-items: center !important;
+                justify-content: center !important;
+            }
+
+            #loginPopupWrapper>div>div {
+                width: 100% !important;
+                max-width: 320px !important;
+                padding: 18px !important;
+                border-radius: 12px !important;
+            }
+
+            /* BUTTON full width (better UX) */
+            #loginPopupWrapper button {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 
@@ -1338,6 +1396,11 @@
             animateCoinRoll(100);
             document.getElementById('ledgerPreview').textContent = "Opening Balance: 0\n+100 ₹C (Welcome Bonus)";
             loadLottie();
+
+            // 🔥 BLUR + POPUP CALL
+            setTimeout(() => {
+                applyResultLock();
+            }, 800);
         }
         function computeSavingsScore() {
             let s = 0;
@@ -1749,6 +1812,86 @@ DARK/LIGHT MODE TOGGLE
             themeBtn.textContent = isLight ? "☀️ Light" : "🌙 Dark";
             localStorage.setItem("theme", isLight ? "light" : "dark");
         });
+
+    </script>
+
+    <script>
+        /* hide & pop */
+
+        function applyResultLock() {
+
+            if (document.getElementById("loginPopupWrapper")) return;
+
+            const wrapper = document.createElement('div');
+            wrapper.id = "loginPopupWrapper";
+
+            const isMobile = window.innerWidth <= 640;
+
+            wrapper.innerHTML = `
+    <div style="
+        position:fixed;
+        inset:0;
+        z-index:9998;
+
+        backdrop-filter: blur(8px);
+        background: rgba(0,0,0,0.3);
+
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        padding:${isMobile ? "16px" : "0"};
+    ">
+        <div style="
+            width:100%;
+            max-width:${isMobile ? "320px" : "380px"};
+            padding:${isMobile ? "18px" : "22px"};
+
+            background:rgba(10,15,30,0.85);
+            border-radius:${isMobile ? "12px" : "14px"};
+
+            text-align:center;
+            box-shadow:0 20px 60px rgba(0,0,0,0.6);
+        ">
+            <div style="font-size:${isMobile ? "18px" : "22px"};font-weight:800;margin-bottom:10px;color:whitesmoke;">
+                🔒 Result Locked
+            </div>
+
+            <div style="font-size:${isMobile ? "13px" : "14px"};margin-bottom:18px;color:#cbd5e1;">
+                Your Detail Paisa Score Report is ready 🎉<br>
+                Login to unlock full report
+            </div>
+
+            <button id="unlockBtn" style="
+                width:100%;
+                padding:${isMobile ? "10px" : "12px"};
+                border:none;
+                border-radius:8px;
+                font-weight:700;
+                background:linear-gradient(90deg,#6ee7f2,#7c3aed);
+                color:#071026;
+                cursor:pointer;
+            ">
+                SignUp - Into Vault
+            </button>
+        </div>
+    </div>
+    `;
+
+            document.body.appendChild(wrapper);
+
+            document.getElementById("unlockBtn").addEventListener("click", () => {
+                window.location.href = "https://paisabada.in/signup.html";
+            });
+        }
+
+
+
+
+        function resetResultLock() {
+            const wrapper = document.getElementById("loginPopupWrapper");
+            if (wrapper) wrapper.remove();
+        }
+
 
     </script>
 </body>
